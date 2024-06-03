@@ -1,0 +1,102 @@
+public class Bank {
+    // Example validation rules
+    public boolean isValidAccountNumber(String accountNumber) {
+        // Account number should be exactly 10 digits
+        return accountNumber != null && accountNumber.matches("\\d{10}");
+    }
+
+    public boolean hasSufficientBalance(double balance, double amountToWithdraw) {
+        // Check if there is enough balance for the withdrawal
+        return balance >= amountToWithdraw;
+    }
+}
+
+
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class BankTest {
+    @Test
+    public void testValidAccountNumber() {
+        Bank bank = new Bank();
+        assertTrue(bank.isValidAccountNumber("1234567890"));
+    }
+
+    @Test
+    public void testInvalidAccountNumber() {
+        Bank bank = new Bank();
+        assertFalse(bank.isValidAccountNumber("12345")); // too short
+        assertFalse(bank.isValidAccountNumber("")); // empty
+        assertFalse(bank.isValidAccountNumber(null)); // null
+        assertFalse(bank.isValidAccountNumber("12345678901")); // too long
+        assertFalse(bank.isValidAccountNumber("abcdefghij")); // non-numeric
+    }
+
+    @Test
+    public void testSufficientBalance() {
+        Bank bank = new Bank();
+        assertTrue(bank.hasSufficientBalance(1000.00, 500.00));
+    }
+
+    @Test
+    public void testInsufficientBalance() {
+        Bank bank = new Bank();
+        assertFalse(bank.hasSufficientBalance(500.00, 1000.00)); // not enough balance
+    }
+}
+
+
+wget https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+wget https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+
+
+javac -cp .:junit-4.13.2.jar:hamcrest-core-1.3.jar -d bin src/Bank.java test/BankTest.java
+
+java -cp .:bin:junit-4.13.2.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore BankTest
+
+
+
+
+
+sudo su
+-->docker ps
+-->sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.7/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+-->sudo chmod +x /usr/local/bin/docker-compose
+-->docker-compose --version
+-->nano docker-compose.yml
+(new tab)
+-->version: '3.8'
+
+services:
+ web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+
+  
+  cache:
+    image: redis:latest
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+
+crtlo and crtl x
+-->docker-compose up -d
+-->docker ps
+-->docker-compose up -d --scale cache=3
+--> docker pull ubuntu
+--> docker run -dit --name host1 --network host ubuntu
+--> docker run -dit --name host2 --network host ubuntu
+--> docker ps
+--> docker exec host1 apt-get update
+--> docker  exec host1 apt-get install iputils-ping
+--> docker exec host2 apt-get update
+--> docker  exec host2 apt-get install iputils-ping
+--> docker exec host1 hostname -i
+--> docker exec host2 ping -c 4 <previously generated IP>
